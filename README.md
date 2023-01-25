@@ -28,5 +28,6 @@ This repository contains my solution for the coursera course Algorithm I & II
 [Project 10 : Burrows-Wheeler](https://coursera.cs.princeton.edu/algs4/assignments/burrows/specification.php)
 
 Thanks for:
-[Reference 1](https://github.com/PKUFlyingPig/Princeton-Algorithm)
-[Reference 2](https://github.com/MolinDeng/Princeton-algs4)
+- [CSDIY](https://csdiy.wiki/数据结构与算法/Algo/)
+- [Reference 1](https://github.com/PKUFlyingPig/Princeton-Algorithm)
+- [Reference 2](https://github.com/MolinDeng/Princeton-algs4)
