@@ -1,7 +1,9 @@
 # Princeton-Algorithm
 This repository contains my solution for the coursera course Algorithm I & II
 
-## Useful Link
+## Useful Links
+
+[Textbook](https://algs4.cs.princeton.edu/home/)
 
 [Coursera course website : part1](https://www.coursera.org/learn/algorithms-part1/home/welcome)
 
