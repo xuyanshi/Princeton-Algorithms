@@ -3,11 +3,14 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class UF {
     private int[] id;
+    private int[] sz; // size
 
     public UF(int N) {
         id = new int[N];
+        sz = new int[N];
         for (int i = 0; i < N; i++) {
             id[i] = i;
+            sz[i] = 1;
         }
     }
 
@@ -21,7 +24,17 @@ public class UF {
     void union(int p, int q) {
         int rootP = root(p);
         int rootQ = root(q);
-        id[rootP] = rootQ;
+        if (rootP == rootQ) {
+            return;
+        }
+        if (sz[rootP] < sz[rootQ]) {
+            id[rootP] = rootQ;
+            sz[rootQ] += sz[rootP];
+        } else {
+            id[rootQ] = rootP;
+            sz[rootP] += sz[rootQ];
+        }
+
     }
 
     boolean connected(int p, int q) {
