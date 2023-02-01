@@ -2,16 +2,30 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 public class UF {
-    public UF(int N) {
+    private int[] id;
 
+    public UF(int N) {
+        id = new int[N];
+        for (int i = 0; i < N; i++) {
+            id[i] = i;
+        }
+    }
+
+    private int root(int i) {
+        while (id[i] != i) {
+            i = id[i];
+        }
+        return i;
     }
 
     void union(int p, int q) {
-
+        int rootP = root(p);
+        int rootQ = root(q);
+        id[rootP] = rootQ;
     }
 
     boolean connected(int p, int q) {
-        return false;
+        return root(p) == root(q);
     }
 
     int find(int p) {
