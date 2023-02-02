@@ -126,7 +126,7 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
 
-        return grid.find(flatten(row, col)) == grid.find(top);
+        return grid.find(flatten(row, col)) == grid.find(top) && isOpen(row, col);
     }
 
     // returns the number of open sites
