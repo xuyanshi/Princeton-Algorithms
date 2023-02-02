@@ -2,24 +2,42 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 public class StackOfStrings {
+    private class Node {
+        String item;
+        Node next;
+    }
+
+    private Node first = null;
+    private int sz = 0;
+
     public StackOfStrings() {
 
     }
 
     void push(String item) {
-
+        Node oldFirst = first;
+        first = new Node();
+        first.item = item;
+        first.next = oldFirst;
+        sz++;
     }
 
     String pop() {
-        return "";
+        if (sz > 0) {
+            String item = first.item;
+            first = first.next;
+            sz--;
+            return item;
+        }
+        return null;
     }
 
     boolean isEmpty() {
-        return true;
+        return first == null;
     }
 
     int size() {
-        return 0;
+        return sz;
     }
 
     public static void main(String[] args) {
