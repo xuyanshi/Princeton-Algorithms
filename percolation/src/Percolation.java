@@ -6,6 +6,8 @@ public class Percolation {
     int top, bottom;
     boolean[] opened;
 
+    int countOfOpenSites;
+
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
         if (n <= 0) {
@@ -25,6 +27,7 @@ public class Percolation {
         opened = new boolean[n * n + 2];
         opened[top] = true;
         opened[bottom] = true;
+        countOfOpenSites = 0;
     }
 
 /*
@@ -97,6 +100,7 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
         opened[flatten(row, col)] = true;
+        countOfOpenSites++;
         for (int[] dir : direction) {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
@@ -126,7 +130,7 @@ public class Percolation {
 
     // returns the number of open sites
     public int numberOfOpenSites() {
-        return N + 2 - grid.count();
+        return countOfOpenSites;
     }
 
     // does the system percolate?
