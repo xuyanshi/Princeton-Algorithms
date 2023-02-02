@@ -1,17 +1,15 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-import static java.lang.Math.sqrt;
-
 public class PercolationStats {
     private Percolation percolation;
-    private int T;
+    private int t;
     private double[] x;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
-        T = trials;
-        x = new double[T];
+        t = trials;
+        x = new double[t];
         for (int trial = 0; trial < trials; trial++) {
             percolation = new Percolation(n);
             while (!percolation.percolates()) {
@@ -35,18 +33,22 @@ public class PercolationStats {
         return StdStats.stddev(x);
     }
 
+    private final double CONFIDENCE_95 = 1.96;
+
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return mean() - 1.96 * stddev() / sqrt(T);
+        return mean() - CONFIDENCE_95 * stddev() / Math.sqrt(t);
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return mean() + 1.96 * stddev() / sqrt(T);
+        return mean() + CONFIDENCE_95 * stddev() / Math.sqrt(t);
     }
 
     // test client (see below)
     public static void main(String[] args) {
+        int n = Integer.parseInt(args[0]);
+        int t = Integer.parseInt(args[1]);
         PercolationStats ps = new PercolationStats(200, 100);
         System.out.println("mean = " + ps.mean());
         System.out.println("stddev = " + ps.stddev());

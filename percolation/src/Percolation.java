@@ -1,19 +1,21 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int N;
+    private int n;
     private WeightedQuickUnionUF grid;
     private int top, bottom;
     private boolean[] opened;
 
     private int countOfOpenSites;
 
+    private final int[][] direction = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
         if (n <= 0) {
             throw new IllegalArgumentException();
         }
-        N = n;
+        this.n = n;
         grid = new WeightedQuickUnionUF(n * n + 2); // 0 is virtual top, n*n+1 is virtual bottom
         top = 0;
         bottom = n * n + 1;
@@ -85,14 +87,13 @@ public class Percolation {
 */
 
     private boolean illegal(int coordinate) {
-        return coordinate < 1 || coordinate > N;
+        return coordinate < 1 || coordinate > n;
     }
 
     private int flatten(int row, int col) {
-        return (row - 1) * N + col;
+        return (row - 1) * n + col;
     }
 
-    private final int[][] direction = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
@@ -125,7 +126,7 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
 
-        return grid.connected(flatten(row, col), top);
+        return grid.find(flatten(row, col)) == grid.find(top);
     }
 
     // returns the number of open sites
@@ -135,7 +136,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return grid.connected(top, bottom);
+        return grid.find(bottom) == grid.find(top);
     }
 
     // test client (optional)
