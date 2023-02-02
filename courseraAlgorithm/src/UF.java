@@ -2,8 +2,9 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 public class UF {
-    private int[] id;
+    private int[] id; // component identifier
     private int[] sz; // size
+    int cnt; // count
 
     public UF(int N) {
         id = new int[N];
@@ -12,6 +13,7 @@ public class UF {
             id[i] = i;
             sz[i] = 1;
         }
+        cnt = N;
     }
 
     private int root(int i) {
@@ -35,7 +37,7 @@ public class UF {
             id[rootQ] = rootP;
             sz[rootP] += sz[rootQ];
         }
-
+        cnt--;
     }
 
     boolean connected(int p, int q) {
@@ -43,11 +45,11 @@ public class UF {
     }
 
     int find(int p) {
-        return 0;
+        return id[p];
     }
 
     int count() {
-        return 0;
+        return cnt;
     }
 
     public static void main(String[] args) {
