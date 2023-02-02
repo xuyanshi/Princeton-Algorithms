@@ -1,5 +1,4 @@
 public class Percolation {
-    int[] id;
     int N;
 
     // creates n-by-n grid, with all sites initially blocked
@@ -8,7 +7,7 @@ public class Percolation {
             throw new IllegalArgumentException();
         }
         N = n;
-        id = new int[n * n + 2]; // 0 is virtual top, n*n+1 is virtual bottom
+        UF grid = new UF(n * n + 2); // 0 is virtual top, n*n+1 is virtual bottom
 
     }
 
