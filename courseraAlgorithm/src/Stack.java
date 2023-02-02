@@ -1,6 +1,29 @@
-public class Stack<T> {
+import java.util.Iterator;
+
+public class Stack<T> implements Iterable<T> {
     private Node first = null;
     private int sz = 0;
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ListIterator();
+    }
+
+    private class ListIterator implements Iterator<T> {
+        private Node current = first;
+
+        @Override
+        public boolean hasNext() {
+            return current == null;
+        }
+
+        @Override
+        public T next() {
+            T item = current.item;
+            current = current.next;
+            return item;
+        }
+    }
 
     private class Node {
         T item;
