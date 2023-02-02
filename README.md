@@ -1,5 +1,5 @@
-# Princeton-Algorithm
-This repository contains my solution for the coursera course Algorithm I & II
+# Princeton-Algorithms
+This repository contains my solution for the coursera course Algorithms I & II
 
 ## Useful Links
 
