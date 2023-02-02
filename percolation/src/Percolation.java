@@ -136,6 +136,9 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
+        if (n == 1) {
+            return isOpen(1, 1);
+        }
         return grid.find(bottom) == grid.find(top);
     }
 
