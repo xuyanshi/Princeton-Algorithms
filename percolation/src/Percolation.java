@@ -1,12 +1,12 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    int N;
-    WeightedQuickUnionUF grid;
-    int top, bottom;
-    boolean[] opened;
+    private int N;
+    private WeightedQuickUnionUF grid;
+    private int top, bottom;
+    private boolean[] opened;
 
-    int countOfOpenSites;
+    private int countOfOpenSites;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {

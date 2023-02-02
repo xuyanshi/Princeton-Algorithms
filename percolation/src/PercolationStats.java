@@ -4,9 +4,9 @@ import edu.princeton.cs.algs4.StdStats;
 import static java.lang.Math.sqrt;
 
 public class PercolationStats {
-    Percolation percolation;
-    int T;
-    double[] x;
+    private Percolation percolation;
+    private int T;
+    private double[] x;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
