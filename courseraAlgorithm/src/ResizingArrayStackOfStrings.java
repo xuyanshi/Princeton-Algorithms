@@ -12,6 +12,15 @@ public class ResizingArrayStackOfStrings {
         }
     }
 
+    public String pop() {
+        String item = s[--sz];
+        s[sz] = null;
+        if (sz > 0 && sz <= s.length / 4) {
+            resize(s.length / 2);
+        }
+        return item;
+    }
+
     private void resize(int capacity) {
         String[] copy = new String[capacity];
         for (int i = 0; i < sz; i++) {
