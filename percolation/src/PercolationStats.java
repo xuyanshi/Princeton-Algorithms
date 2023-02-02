@@ -1,7 +1,12 @@
 public class PercolationStats {
+    Percolation percolation;
+
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
+        percolation = new Percolation(n);
+        for (int trial = 0; trial < trials; trial++) {
 
+        }
     }
 
     // sample mean of percolation threshold
@@ -24,8 +29,8 @@ public class PercolationStats {
         return 0.0;
     }
 
-   // test client (see below)
-   public static void main(String[] args) {
+    // test client (see below)
+    public static void main(String[] args) {
 
-   }
+    }
 }
