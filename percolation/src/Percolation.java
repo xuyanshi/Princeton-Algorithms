@@ -100,13 +100,15 @@ public class Percolation {
         if (illegal(row) || illegal(col)) {
             throw new IllegalArgumentException();
         }
-        opened[flatten(row, col)] = true;
-        countOfOpenSites++;
-        for (int[] dir : direction) {
-            int newRow = row + dir[0];
-            int newCol = col + dir[1];
-            if (!illegal(newRow) && !illegal(newCol) && isOpen(newRow, newCol)) {
-                grid.union(flatten(row, col), flatten(newRow, newCol));
+        if (!opened[flatten(row, col)]) {
+            opened[flatten(row, col)] = true;
+            countOfOpenSites++;
+            for (int[] dir : direction) {
+                int newRow = row + dir[0];
+                int newCol = col + dir[1];
+                if (!illegal(newRow) && !illegal(newCol) && isOpen(newRow, newCol)) {
+                    grid.union(flatten(row, col), flatten(newRow, newCol));
+                }
             }
         }
     }
