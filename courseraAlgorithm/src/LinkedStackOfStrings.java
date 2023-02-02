@@ -1,7 +1,7 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-public class StackOfStrings {
+public class LinkedStackOfStrings {
     private class Node {
         String item;
         Node next;
@@ -10,7 +10,7 @@ public class StackOfStrings {
     private Node first = null;
     private int sz = 0;
 
-    public StackOfStrings() {
+    public LinkedStackOfStrings() {
 
     }
 
@@ -41,7 +41,7 @@ public class StackOfStrings {
     }
 
     public static void main(String[] args) {
-        StackOfStrings stack = new StackOfStrings();
+        LinkedStackOfStrings stack = new LinkedStackOfStrings();
         while (!StdIn.isEmpty()) {
             String s = StdIn.readString();
             if (s.equals("-")) {
