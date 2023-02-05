@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
-public class MyMergeSort {
-    public void mergeSort(Integer[] a, int l, int r, Integer[] tmp) {
+public class MyMergeSort<T extends Comparable> {
+    public void mergeSort(T[] a, int l, int r, T[] tmp) {
         if (l >= r) {
             return;
         }
@@ -32,10 +32,10 @@ public class MyMergeSort {
 
 
     public static void main(String[] args) {
-        Integer[] a = new Integer[]{3, 5, 1, 6, 2, 4, 0};
+        Integer[] a = new Integer[]{3, 5, 1, 7, 6, 2, 4, 0};
 
         Integer[] tmp = new Integer[a.length];
-        MyMergeSort mms = new MyMergeSort();
+        MyMergeSort<Integer> mms = new MyMergeSort<>();
 
         System.out.println(Arrays.toString(a));
         mms.mergeSort(a, 0, a.length - 1, tmp);
