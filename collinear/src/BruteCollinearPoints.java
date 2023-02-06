@@ -16,7 +16,8 @@ public class BruteCollinearPoints {
 
     // the line segments
     public LineSegment[] segments() {
-        return null;
+        LineSegment[] ls = new LineSegment[0];
+        return ls;
     }
 
     public static void main(String[] args) {
