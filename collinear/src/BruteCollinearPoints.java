@@ -29,7 +29,7 @@ public class BruteCollinearPoints {
             }
         }
         if (n < 4) {
-            throw new IllegalArgumentException("should include each line segment containing 4 points exactly once.");
+            return;
         }
 
         Point[] tmp = new Point[n];
