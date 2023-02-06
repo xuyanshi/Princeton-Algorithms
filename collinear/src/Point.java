@@ -101,14 +101,14 @@ public class Point implements Comparable<Point> {
      */
     public Comparator<Point> slopeOrder() {
         /* YOUR CODE HERE */
-        return new slopeOrderComparator(this.x, this.y);
+        return new SlopeOrderComparator(this.x, this.y);
     }
 
-    private static class slopeOrderComparator implements Comparator<Point> {
+    private static class SlopeOrderComparator implements Comparator<Point> {
 
         Point p0;
 
-        public slopeOrderComparator(int x0, int y0) {
+        public SlopeOrderComparator(int x0, int y0) {
             p0 = new Point(x0, y0);
         }
 
