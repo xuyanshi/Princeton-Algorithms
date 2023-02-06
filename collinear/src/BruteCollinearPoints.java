@@ -2,7 +2,13 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class BruteCollinearPoints {
+
+    private List<LineSegment> ls_lst;
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
@@ -14,16 +20,45 @@ public class BruteCollinearPoints {
                 throw new IllegalArgumentException("point in the array is null");
             }
         }
+        int n = points.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (points[i].slopeTo(points[j]) == Double.NEGATIVE_INFINITY) {
+                    throw new IllegalArgumentException("the argument to the constructor contains a repeated point");
+                }
+            }
+        }
+        if (n < 4) {
+            throw new IllegalArgumentException("should include each line segment containing 4 points exactly once.");
+        }
+
+        Arrays.sort(points);
+        ls_lst = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                for (int k = j + 1; k < n; k++) {
+                    for (int l = k + 1; l < n; l++) {
+                        double s1 = points[i].slopeTo(points[j]);
+                        double s2 = points[i].slopeTo(points[k]);
+                        double s3 = points[i].slopeTo(points[l]);
+                        if (s1 == s2 && s2 == s3) {
+                            ls_lst.add(new LineSegment(points[i], points[l]));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // the number of line segments
     public int numberOfSegments() {
-        return 0;
+        return ls_lst.size();
     }
 
     // the line segments
     public LineSegment[] segments() {
-        LineSegment[] ls = new LineSegment[0];
+        LineSegment[] ls = new LineSegment[numberOfSegments()];
+        ls = ls_lst.toArray(ls);
         return ls;
     }
 
