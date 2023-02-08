@@ -23,7 +23,7 @@ public class FastCollinearPoints {
         int n = points.length;
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
-                if (points[i].slopeTo(points[j]) == Double.NEGATIVE_INFINITY) {
+                if (points[i].compareTo(points[j]) == 0) {
                     throw new IllegalArgumentException("the argument to the constructor contains a repeated point");
                 }
             }
@@ -33,11 +33,36 @@ public class FastCollinearPoints {
         }
         Point[] tmp = new Point[n];
         System.arraycopy(points, 0, tmp, 0, n);
-
+        Arrays.sort(tmp);
 
         for (Point p : tmp) {
             Arrays.sort(tmp, p.slopeOrder());
-            
+            Point start = p;
+            Point end = p;
+            for (int i = 0; i < n; ) {
+                if (p.compareTo(tmp[i++]) == 0) { // tmp[i] is p.
+                    continue;
+                }
+
+                if (i + 3 > n) {
+                    break;
+                }
+                double k = p.slopeTo(tmp[i]);
+                if (p.slopeTo(tmp[i + 3]) == k) {
+                    int j = i + 4;
+                    for (; j < n; j++) {
+                        if (p.slopeTo(tmp[j]) != k) {
+                            break;
+                        }
+                    }
+                    start = tmp[i];
+                    end = tmp[j - 1];
+                    lsList.add(new LineSegment(start, end));
+                    i = j;
+                } else {
+                    i++;
+                }
+            }
         }
 
     }

@@ -23,7 +23,7 @@ public class BruteCollinearPoints {
         int n = points.length;
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
-                if (points[i].slopeTo(points[j]) == Double.NEGATIVE_INFINITY) {
+                if (points[i].compareTo(points[j]) == 0) {
                     throw new IllegalArgumentException("the argument to the constructor contains a repeated point");
                 }
             }
