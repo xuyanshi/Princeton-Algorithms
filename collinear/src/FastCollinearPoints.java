@@ -33,14 +33,12 @@ public class FastCollinearPoints {
         }
         Point[] tmp = new Point[n];
         System.arraycopy(points, 0, tmp, 0, n);
-        Arrays.sort(tmp);
+//        Arrays.sort(tmp);
 
-        for (Point p : tmp) {
+        for (Point p : points) { // points can NOT be tmp, because tmp will be changed during the program!!!
             Arrays.sort(tmp, p.slopeOrder());
-//            for (int i = 0; i < n; ) {
-//                if (p.compareTo(tmp[i++]) == 0) { // tmp[i] is p.
-//                    continue;
-//                }
+//            Point start = p;
+//            Point end = p;
             for (int i = 1; i < n; ) {
                 double slope = p.slopeTo(tmp[i]);
                 int j = i + 1;
@@ -48,7 +46,7 @@ public class FastCollinearPoints {
                     j++;
                 }
 
-                if (j - i >= 3 && p.compareTo(start(tmp, i, j - 1)) <= 0) {
+                if (j - i >= 3 && p.compareTo(start(tmp, i, j - 1)) < 0) {
                     lsList.add(new LineSegment(p, end(tmp, i, j - 1)));
                 }
 
@@ -58,7 +56,6 @@ public class FastCollinearPoints {
                 i = j;
             }
         }
-
     }
 
     private Point start(Point[] tmp, int low, int high) {
