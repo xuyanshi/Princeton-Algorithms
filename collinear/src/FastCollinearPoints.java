@@ -33,7 +33,12 @@ public class FastCollinearPoints {
         }
         Point[] tmp = new Point[n];
         System.arraycopy(points, 0, tmp, 0, n);
-        Arrays.sort(tmp);
+
+
+        for (Point p : tmp) {
+            Arrays.sort(tmp, p.slopeOrder());
+            
+        }
 
     }
 
