@@ -37,34 +37,48 @@ public class FastCollinearPoints {
 
         for (Point p : tmp) {
             Arrays.sort(tmp, p.slopeOrder());
-            Point start = p;
-            Point end = p;
-            for (int i = 0; i < n; ) {
-                if (p.compareTo(tmp[i++]) == 0) { // tmp[i] is p.
-                    continue;
+//            for (int i = 0; i < n; ) {
+//                if (p.compareTo(tmp[i++]) == 0) { // tmp[i] is p.
+//                    continue;
+//                }
+            for (int i = 1; i < n; ) {
+                double slope = p.slopeTo(tmp[i]);
+                int j = i + 1;
+                while (j < n && p.slopeTo(tmp[j]) == slope) {
+                    j++;
                 }
 
-                if (i + 3 > n) {
+                if (j - i >= 3 && p.compareTo(start(tmp, i, j - 1)) <= 0) {
+                    lsList.add(new LineSegment(p, end(tmp, i, j - 1)));
+                }
+
+                if (j >= n) {
                     break;
                 }
-                double k = p.slopeTo(tmp[i]);
-                if (p.slopeTo(tmp[i + 3]) == k) {
-                    int j = i + 4;
-                    for (; j < n; j++) {
-                        if (p.slopeTo(tmp[j]) != k) {
-                            break;
-                        }
-                    }
-                    start = tmp[i];
-                    end = tmp[j - 1];
-                    lsList.add(new LineSegment(start, end));
-                    i = j;
-                } else {
-                    i++;
-                }
+                i = j;
             }
         }
 
+    }
+
+    private Point start(Point[] tmp, int low, int high) {
+        Point startPoint = tmp[low];
+        for (int i = low + 1; i <= high; i++) {
+            if (tmp[i].compareTo(startPoint) < 0) {
+                startPoint = tmp[i];
+            }
+        }
+        return startPoint;
+    }
+
+    private Point end(Point[] tmp, int low, int high) {
+        Point endPoint = tmp[low];
+        for (int i = low + 1; i <= high; i++) {
+            if (tmp[i].compareTo(endPoint) > 0) {
+                endPoint = tmp[i];
+            }
+        }
+        return endPoint;
     }
 
     // the number of line segments
