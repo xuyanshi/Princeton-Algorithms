@@ -32,10 +32,25 @@ public class maxPQ<Key extends Comparable<Key>> {
 
 
     int size() {
-        return 0;
+        return N;
+    }
+
+    private void swim(int k) {
+
+    }
+
+    private void sink(int k) {
+
     }
 
     private boolean less(int i, int j) {
         return pq[i].compareTo(pq[j]) < 0;
+    }
+
+
+    private void exch(int i, int j) {
+        Key tmp = pq[i];
+        pq[i] = pq[j];
+        pq[j] = tmp;
     }
 }
