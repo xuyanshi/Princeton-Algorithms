@@ -1,4 +1,10 @@
-public class Board {
+import edu.princeton.cs.algs4.StdRandom;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+
+public class Board implements Iterable {
     private int[][] tiles;
     private int n;
 
@@ -49,37 +55,179 @@ public class Board {
 
     // sum of Manhattan distances between tiles and goal
     public int manhattan() {
-        return 0;
+        int manhattanDistance = 0;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                int real = tiles[row][col];
+                if (real != 0) {
+                    int supposedRow = (real - 1) / n;
+                    int supposedCol = (real - 1) % n;
+                    manhattanDistance += Math.abs(row - supposedRow);
+                    manhattanDistance += Math.abs(col - supposedCol);
+                }
+            }
+        }
+        return manhattanDistance;
     }
 
     // is this board the goal board?
     public boolean isGoal() {
-        return false;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                int real = tiles[row][col];
+                int goal = row * n + col + 1;
+                if (real != 0 && real != goal) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     // does this board equal y?
     public boolean equals(Object y) {
-        return false;
+        if (this == y) return true;
+        if (y == null || getClass() != y.getClass()) {
+            return false;
+        }
+
+        Board board = (Board) y;
+
+        if (n != board.n) {
+            return false;
+        }
+
+        return Arrays.deepEquals(tiles, board.tiles);
     }
+
+    private final int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     // all neighboring boards
     public Iterable<Board> neighbors() {
-        return null;
+        return new Iterable<Board>() {
+            @Override
+            public Iterator<Board> iterator() {
+                return new BoardIterator<>();
+            }
+        };
+    }
+
+
+    private class BoardIterator<T> implements Iterator<T> {
+        int leftDirections;
+        ArrayList<ArrayList<Integer>> legalLocations;
+        ;
+        int zeroRow, zeroCol;
+
+        public BoardIterator() {
+            leftDirections = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (tiles[i][j] == 0) {
+                        zeroRow = i;
+                        zeroCol = j;
+                    }
+                }
+            }
+            legalLocations = new ArrayList<>();
+            for (int[] dir : directions) {
+                int x = zeroRow + dir[0], y = zeroCol + dir[1];
+                if (legal(x, y)) {
+                    leftDirections++;
+                    legalLocations.add(new ArrayList<>());
+                    legalLocations.get(legalLocations.size() - 1).add(x);
+                    legalLocations.get(legalLocations.size() - 1).add(y);
+                }
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return leftDirections > 0;
+        }
+
+        @Override
+        public T next() {
+            ArrayList<Integer> location = legalLocations.get(legalLocations.size() - leftDirections);
+            int x = location.get(0), y = location.get(1);
+            leftDirections--;
+            int[][] neighborTiles = new int[n][n];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    neighborTiles[i][j] = tiles[i][j];
+                }
+            }
+            neighborTiles[zeroRow][zeroCol] = tiles[x][y];
+            neighborTiles[x][y] = 0;
+
+            return (T) new Board(neighborTiles);
+        }
+    }
+
+
+    private boolean legal(int row, int col) {
+        if (row < 0 || row >= n) {
+            return false;
+        }
+        if (col < 0 || col >= n) {
+            return false;
+        }
+        return true;
     }
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
-        return null;
+        int x1 = StdRandom.uniformInt(n);
+        int y1 = StdRandom.uniformInt(n);
+        while (tiles[x1][y1] == 0) {
+            x1 = StdRandom.uniformInt(n);
+            y1 = StdRandom.uniformInt(n);
+        }
+        int x2 = StdRandom.uniformInt(n);
+        int y2 = StdRandom.uniformInt(n);
+        while (tiles[x2][y2] == 0 || flatten(x1, y1) == flatten(x2, y2)) {
+            x2 = StdRandom.uniformInt(n);
+            y2 = StdRandom.uniformInt(n);
+        }
+        int[][] twinTiles = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                twinTiles[i][j] = tiles[i][j];
+            }
+        }
+        int tmp = twinTiles[x1][y1];
+        twinTiles[x1][y1] = twinTiles[x2][y2];
+        twinTiles[x2][y2] = tmp;
+        return new Board(twinTiles);
+    }
+
+    private int flatten(int x, int y) {
+        return x * n + y;
     }
 
     // unit testing (not graded)
     public static void main(String[] args) {
-        int n = 3;
         int[][] tiles = {{1, 0, 3}, {4, 2, 5}, {7, 8, 6}};
         Board bd = new Board(tiles);
         System.out.println(bd);
         System.out.println("Hamming: " + bd.hamming());
         System.out.println("Manhattan: " + bd.manhattan());
+        System.out.println("isGoal: " + bd.isGoal());
+
+        Board bd1 = new Board(tiles);
+        System.out.println("Equal: " + bd.equals(bd1));
+
+        System.out.println("Neighbors: ");
+        for (Board board : bd.neighbors()) {
+            System.out.println(board);
+        }
+
+        System.out.println("Twin: ");
+        System.out.println(bd.twin());
     }
 
+    @Override
+    public Iterator iterator() {
+        return null;
+    }
 }
