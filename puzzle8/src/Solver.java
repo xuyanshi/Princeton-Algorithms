@@ -1,16 +1,21 @@
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Solver {
 
+    private Board board;
+
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
-
+        MinPQ<Integer> pq = new MinPQ<>();
+        board = initial;
     }
 
     // is the initial board solvable? (see below)
     public boolean isSolvable() {
-        return false;
+
+        return board.manhattan() < 10;
     }
 
     // min number of moves to solve initial board; -1 if unsolvable

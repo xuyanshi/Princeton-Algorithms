@@ -3,10 +3,13 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class Board implements Iterable {
+public class Board {
     private int[][] tiles;
     private int n;
+
+    private final int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
@@ -100,7 +103,6 @@ public class Board implements Iterable {
         return Arrays.deepEquals(tiles, board.tiles);
     }
 
-    private final int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     // all neighboring boards
     public Iterable<Board> neighbors() {
@@ -116,8 +118,8 @@ public class Board implements Iterable {
     private class BoardIterator<T> implements Iterator<T> {
         int leftDirections;
         ArrayList<ArrayList<Integer>> legalLocations;
-        ;
-        int zeroRow, zeroCol;
+        int zeroRow;
+        int zeroCol;
 
         public BoardIterator() {
             leftDirections = 0;
@@ -148,6 +150,9 @@ public class Board implements Iterable {
 
         @Override
         public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("No next item.");
+            }
             ArrayList<Integer> location = legalLocations.get(legalLocations.size() - leftDirections);
             int x = location.get(0), y = location.get(1);
             leftDirections--;
@@ -226,8 +231,4 @@ public class Board implements Iterable {
         System.out.println(bd.twin());
     }
 
-    @Override
-    public Iterator iterator() {
-        return null;
-    }
 }
