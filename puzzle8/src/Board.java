@@ -212,6 +212,7 @@ public class Board {
 
     // unit testing (not graded)
     public static void main(String[] args) {
+/*
         int[][] tiles = {{1, 0, 3}, {4, 2, 5}, {7, 8, 6}};
         Board bd = new Board(tiles);
         System.out.println(bd);
@@ -229,6 +230,7 @@ public class Board {
 
         System.out.println("Twin: ");
         System.out.println(bd.twin());
+*/
     }
 
 }
