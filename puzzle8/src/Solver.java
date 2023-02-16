@@ -1,9 +1,12 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
-import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+import java.util.Stack;
+>>>>>>> parent of 9273431 (Update Solver.java)
 
 public class Solver {
     private boolean solvable;
@@ -53,8 +56,13 @@ public class Solver {
             }
             visitedBoards.add(dequeuedSearchNode.board);
             for (Board bd : dequeuedSearchNode.board.neighbors()) {
+<<<<<<< HEAD
                 if (visited(bd)) {
                     continue;
+=======
+                if (dequeuedSearchNode.prev != null && bd.equals(dequeuedSearchNode.prev.board)) {
+                    continue; // Not completed
+>>>>>>> parent of 9273431 (Update Solver.java)
                 }
                 pq.insert(new Node(bd, dequeuedSearchNode.moves + 1, dequeuedSearchNode));
             }
