@@ -1,16 +1,11 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
-import java.util.Stack;
->>>>>>> parent of 9273431 (Update Solver.java)
-
 public class Solver {
-    private boolean solvable;
-    private int minMoves;
+    private final boolean solvable;
+    private final int minMoves;
 
     private Node destination;
 
@@ -34,49 +29,45 @@ public class Solver {
         }
     }
 
-    private ArrayList<Board> visitedBoards;
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         if (initial == null) {
             throw new IllegalArgumentException("the argument is null");
         }
-        solvable = false;
-        minMoves = -1;
         MinPQ<Node> pq = new MinPQ<>();
-        visitedBoards = new ArrayList<>();
+        MinPQ<Node> pqTwin = new MinPQ<>();
         pq.insert(new Node(initial, 0, null));
-        while (!pq.isEmpty()) {
-            Node dequeuedSearchNode = pq.delMin();
+        pqTwin.insert(new Node(initial.twin(), 0, null));
+        MinPQ<Node> executor = pq;
+        Node dequeuedSearchNode = null;
+        while (!executor.isEmpty()) {
+            dequeuedSearchNode = executor.delMin();
             if (dequeuedSearchNode.board.isGoal()) {
-                solvable = true;
-                minMoves = dequeuedSearchNode.moves;
-                destination = dequeuedSearchNode;
+
                 break;
             }
-            visitedBoards.add(dequeuedSearchNode.board);
             for (Board bd : dequeuedSearchNode.board.neighbors()) {
-<<<<<<< HEAD
-                if (visited(bd)) {
-                    continue;
-=======
-                if (dequeuedSearchNode.prev != null && bd.equals(dequeuedSearchNode.prev.board)) {
-                    continue; // Not completed
->>>>>>> parent of 9273431 (Update Solver.java)
+                if (dequeuedSearchNode.prev == null || !bd.equals(dequeuedSearchNode.prev.board)) {
+                    executor.insert(new Node(bd, dequeuedSearchNode.moves + 1, dequeuedSearchNode));
                 }
-                pq.insert(new Node(bd, dequeuedSearchNode.moves + 1, dequeuedSearchNode));
+            }
+            /* lockstep */
+            if (executor == pq) {
+                executor = pqTwin;
+            } else {
+                executor = pq;
             }
         }
-    }
+        if (executor == pq) {
+            solvable = true;
+        } else {
+            solvable = false;
+        }
+        assert dequeuedSearchNode != null;
+        minMoves = dequeuedSearchNode.moves;
+        destination = dequeuedSearchNode;
 
-    private boolean visited(Board bd) {
-        for (int i = visitedBoards.size() - 1; i >= 0; i--) {
-            Board visitedBoard = visitedBoards.get(i);
-            if (bd.equals(visitedBoard)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // is the initial board solvable? (see below)

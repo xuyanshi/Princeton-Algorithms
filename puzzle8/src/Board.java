@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class Board {
-    private int[][] tiles;
-    private int n;
+    private final int[][] tiles;
+    private final int n;
 
     private int zeroRow;
     private int zeroCol;
