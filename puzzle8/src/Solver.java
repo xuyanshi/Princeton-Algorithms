@@ -2,30 +2,86 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 
-public class Solver {
+import java.util.Stack;
 
-    private Board board;
+public class Solver {
+    private boolean solvable;
+    private int minMoves;
+
+    private Node destination;
+
+    private class Node implements Comparable<Node> {
+
+        Board board;
+        int moves;
+        Node prev;
+        int priority;
+
+        public Node(Board board, int moves, Node prev) {
+            this.board = board;
+            this.moves = moves;
+            this.prev = prev;
+            this.priority = moves + board.manhattan();
+        }
+
+
+        public int compareTo(Node that) {
+            return Integer.compare(priority, that.priority);
+        }
+    }
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
-        MinPQ<Integer> pq = new MinPQ<>();
-        board = initial;
+        if (initial == null) {
+            throw new IllegalArgumentException("the argument is null");
+        }
+        solvable = false;
+        minMoves = -1;
+        MinPQ<Node> pq = new MinPQ<>();
+        pq.insert(new Node(initial, 0, null));
+        while (!pq.isEmpty()) {
+            Node dequeuedSearchNode = pq.delMin();
+            if (dequeuedSearchNode.board.isGoal()) {
+                solvable = true;
+                minMoves = dequeuedSearchNode.moves;
+                destination = dequeuedSearchNode;
+                break;
+            }
+            for (Board bd : dequeuedSearchNode.board.neighbors()) {
+                if (dequeuedSearchNode.prev != null && bd.equals(dequeuedSearchNode.prev.board)) {
+                    continue; // Not completed
+                }
+                pq.insert(new Node(bd, dequeuedSearchNode.moves + 1, dequeuedSearchNode));
+            }
+        }
+
     }
 
     // is the initial board solvable? (see below)
     public boolean isSolvable() {
-
-        return board.manhattan() < 10;
+        return solvable;
     }
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        return 0;
+        if (!isSolvable()) {
+            return -1;
+        }
+        return minMoves;
     }
 
     // sequence of boards in the shortest solution; null if unsolvable
     public Iterable<Board> solution() {
-        return null;
+        if (!isSolvable()) {
+            return null;
+        }
+        Stack<Board> stk = new Stack<>();
+        Node node = destination;
+        while (node != null) {
+            stk.push(node.board);
+            node = node.prev;
+        }
+        return stk;
     }
 
     // test client (see below)

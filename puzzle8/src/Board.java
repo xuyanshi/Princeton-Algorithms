@@ -9,6 +9,11 @@ public class Board {
     private int[][] tiles;
     private int n;
 
+    private int zeroRow;
+    private int zeroCol;
+
+    private int hammingDistance;
+    private int manhattanDistance;
     private final int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
     // create a board from an n-by-n array of tiles,
@@ -19,6 +24,34 @@ public class Board {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 this.tiles[i][j] = tiles[i][j];
+                if (tiles[i][j] == 0) {
+                    zeroRow = i;
+                    zeroCol = j;
+                }
+            }
+        }
+
+        hammingDistance = 0;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                int real = tiles[row][col];
+                int goal = row * n + col + 1;
+                if (real != 0 && real != goal) {
+                    hammingDistance++;
+                }
+            }
+        }
+
+        manhattanDistance = 0;
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                int real = tiles[row][col];
+                if (real != 0) {
+                    int supposedRow = (real - 1) / n;
+                    int supposedCol = (real - 1) % n;
+                    manhattanDistance += Math.abs(row - supposedRow);
+                    manhattanDistance += Math.abs(col - supposedCol);
+                }
             }
         }
     }
@@ -43,48 +76,17 @@ public class Board {
 
     // number of tiles out of place
     public int hamming() {
-        int hammingDistance = 0;
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                int real = tiles[row][col];
-                int goal = row * n + col + 1;
-                if (real != 0 && real != goal) {
-                    hammingDistance++;
-                }
-            }
-        }
         return hammingDistance;
     }
 
     // sum of Manhattan distances between tiles and goal
     public int manhattan() {
-        int manhattanDistance = 0;
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                int real = tiles[row][col];
-                if (real != 0) {
-                    int supposedRow = (real - 1) / n;
-                    int supposedCol = (real - 1) % n;
-                    manhattanDistance += Math.abs(row - supposedRow);
-                    manhattanDistance += Math.abs(col - supposedCol);
-                }
-            }
-        }
         return manhattanDistance;
     }
 
     // is this board the goal board?
     public boolean isGoal() {
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                int real = tiles[row][col];
-                int goal = row * n + col + 1;
-                if (real != 0 && real != goal) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return hammingDistance == 0;
     }
 
     // does this board equal y?
@@ -118,19 +120,9 @@ public class Board {
     private class BoardIterator<T> implements Iterator<T> {
         int leftDirections;
         ArrayList<ArrayList<Integer>> legalLocations;
-        int zeroRow;
-        int zeroCol;
 
         public BoardIterator() {
             leftDirections = 0;
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (tiles[i][j] == 0) {
-                        zeroRow = i;
-                        zeroCol = j;
-                    }
-                }
-            }
             legalLocations = new ArrayList<>();
             for (int[] dir : directions) {
                 int x = zeroRow + dir[0], y = zeroCol + dir[1];
