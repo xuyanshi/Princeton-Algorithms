@@ -1,8 +1,7 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
-
-import java.util.Stack;
 
 public class Solver {
     private boolean solvable;
@@ -49,7 +48,7 @@ public class Solver {
             }
             for (Board bd : dequeuedSearchNode.board.neighbors()) {
                 if (dequeuedSearchNode.prev != null && bd.equals(dequeuedSearchNode.prev.board)) {
-                    continue; // Not completed
+                    continue; // Not completed, causing infinite loop when unsolvable.
                 }
                 pq.insert(new Node(bd, dequeuedSearchNode.moves + 1, dequeuedSearchNode));
             }
