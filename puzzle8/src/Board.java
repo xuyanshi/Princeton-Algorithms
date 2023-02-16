@@ -223,12 +223,6 @@ public class Board {
         return new Board(twinTiles);
     }
 
-/*
-    private int flatten(int x, int y) {
-        return x * n + y;
-    }
-*/
-
     // unit testing (not graded)
     public static void main(String[] args) {
 
