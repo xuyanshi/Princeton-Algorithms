@@ -1,5 +1,3 @@
-import edu.princeton.cs.algs4.StdRandom;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -174,6 +172,9 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
+        /* Not Random twin. */
+        /* Test 12: check that Board is immutable by testing whether methods */
+/*
         int x1 = StdRandom.uniformInt(n);
         int y1 = StdRandom.uniformInt(n);
         while (tiles[x1][y1] == 0) {
@@ -196,11 +197,37 @@ public class Board {
         twinTiles[x1][y1] = twinTiles[x2][y2];
         twinTiles[x2][y2] = tmp;
         return new Board(twinTiles);
+*/
+        /* In this implementation, I exchange the most previous two non-zero tiles. */
+        int[][] twinTiles = new int[n][n];
+        int[] exchange = new int[4];
+        int order = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                twinTiles[i][j] = tiles[i][j];
+                if (i != zeroRow || j != zeroCol) {
+                    exchange[order++] = i;
+                    exchange[order++] = j;
+                    if (order == 4) {
+                        break;
+                    }
+                }
+            }
+            if (order == 4) {
+                break;
+            }
+        }
+        /* Exchange */
+        twinTiles[exchange[0]][exchange[1]] = tiles[exchange[2]][exchange[3]];
+        twinTiles[exchange[2]][exchange[3]] = tiles[exchange[0]][exchange[1]];
+        return new Board(twinTiles);
     }
 
+/*
     private int flatten(int x, int y) {
         return x * n + y;
     }
+*/
 
     // unit testing (not graded)
     public static void main(String[] args) {
