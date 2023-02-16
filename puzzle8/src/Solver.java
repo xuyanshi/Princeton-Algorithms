@@ -3,6 +3,8 @@ import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
+
 public class Solver {
     private boolean solvable;
     private int minMoves;
@@ -29,6 +31,8 @@ public class Solver {
         }
     }
 
+    private ArrayList<Board> visitedBoards;
+
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         if (initial == null) {
@@ -37,6 +41,7 @@ public class Solver {
         solvable = false;
         minMoves = -1;
         MinPQ<Node> pq = new MinPQ<>();
+        visitedBoards = new ArrayList<>();
         pq.insert(new Node(initial, 0, null));
         while (!pq.isEmpty()) {
             Node dequeuedSearchNode = pq.delMin();
@@ -46,14 +51,24 @@ public class Solver {
                 destination = dequeuedSearchNode;
                 break;
             }
+            visitedBoards.add(dequeuedSearchNode.board);
             for (Board bd : dequeuedSearchNode.board.neighbors()) {
-                if (dequeuedSearchNode.prev != null && bd.equals(dequeuedSearchNode.prev.board)) {
-                    continue; // Not completed, causing infinite loop when unsolvable.
+                if (visited(bd)) {
+                    continue;
                 }
                 pq.insert(new Node(bd, dequeuedSearchNode.moves + 1, dequeuedSearchNode));
             }
         }
+    }
 
+    private boolean visited(Board bd) {
+        for (int i = visitedBoards.size() - 1; i >= 0; i--) {
+            Board visitedBoard = visitedBoards.get(i);
+            if (bd.equals(visitedBoard)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // is the initial board solvable? (see below)
