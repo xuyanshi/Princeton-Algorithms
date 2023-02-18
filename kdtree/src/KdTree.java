@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 public class KdTree {
-    TreeSet<Point2D> treeset;
+    private TreeSet<Point2D> treeset;
 
     // construct an empty set of points
     public KdTree() {
