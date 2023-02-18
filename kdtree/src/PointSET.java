@@ -73,7 +73,7 @@ public class PointSET {
         if (isEmpty()) {
             return null;
         }
-        double minDistanceSquare = Double.MAX_VALUE;
+        double minDistanceSquare = Double.POSITIVE_INFINITY;
         Point2D minDistancePoint = null;
         for (Point2D point : treeset) {
             if (p == point) {
