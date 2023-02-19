@@ -10,7 +10,7 @@ public class KdTree {
         /* Odd is vertical, even is horizontal.
          * For example, root (level 1) is vertical.
          * */
-        private boolean isOdd;
+        private int depth;
         private Point2D point;
         private Node left, right;
 
@@ -20,11 +20,11 @@ public class KdTree {
 
 
         private boolean isVertical() {
-            return isOdd;
+            return depth % 2 == 1;
         }
 
-        public Node(boolean isOdd, Point2D point, RectHV rect) {
-            this.isOdd = isOdd;
+        public Node(int depth, Point2D point, RectHV rect) {
+            this.depth = depth;
             this.point = point;
             this.rect = rect;
         }
@@ -67,7 +67,7 @@ public class KdTree {
 
     private void insertHelper(Node node, Point2D p, boolean vertical) {
         if (root == null) {
-            root = new Node(true, p, new RectHV(0, 0, 1, 1));
+            root = new Node(1, p, new RectHV(0, 0, 1, 1));
             return;
         }
         if (node == null || p.equals(node.point)) {
@@ -76,7 +76,9 @@ public class KdTree {
         if (vertical) {
             if (p.x() < node.point.x()) {
                 if (node.left == null) {
-                    node.left = new Node(false, p, new RectHV());
+                    node.left = new Node(node.depth + 1, p, new RectHV(node.rect.xmin(), node.rect.ymin(), p.x(), node.rect.ymax()));
+                } else {
+                    insertHelper(node.left, p, false);
                 }
             } else if (p.x() > node.point.x()) {
 
@@ -109,7 +111,7 @@ public class KdTree {
         if (p.equals(node.point)) {
             return true;
         }
-        if (node.isOdd) {
+        if (node.depth % 2 == 1) {
 
         } else {
 
