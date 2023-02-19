@@ -18,6 +18,11 @@ public class KdTree {
          ** which encloses all the points in its subtree. */
         private RectHV rect;
 
+
+        private boolean isVertical() {
+            return isOdd;
+        }
+
         public Node(boolean isOdd, Point2D point, RectHV rect) {
             this.isOdd = isOdd;
             this.point = point;
@@ -55,8 +60,37 @@ public class KdTree {
             throw new IllegalArgumentException("argument is null.");
         }
         if (!contains(p)) {
-            // insert
+            insertHelper(root, p, true);
             sz++;
+        }
+    }
+
+    private void insertHelper(Node node, Point2D p, boolean vertical) {
+        if (root == null) {
+            root = new Node(true, p, new RectHV(0, 0, 1, 1));
+            return;
+        }
+        if (node == null || p.equals(node.point)) {
+            return;
+        }
+        if (vertical) {
+            if (p.x() < node.point.x()) {
+                if (node.left == null) {
+                    node.left = new Node(false, p, new RectHV());
+                }
+            } else if (p.x() > node.point.x()) {
+
+            } else {
+
+            }
+        } else {
+            if (p.y() < node.point.y()) {
+
+            } else if (p.y() > node.point.y()) {
+
+            } else {
+
+            }
         }
     }
 
@@ -64,6 +98,21 @@ public class KdTree {
     public boolean contains(Point2D p) {
         if (p == null) {
             throw new IllegalArgumentException("argument is null.");
+        }
+        return containsHelper(root, p);
+    }
+
+    private boolean containsHelper(Node node, Point2D p) {
+        if (node == null) {
+            return false;
+        }
+        if (p.equals(node.point)) {
+            return true;
+        }
+        if (node.isOdd) {
+
+        } else {
+
         }
         return false;
     }
