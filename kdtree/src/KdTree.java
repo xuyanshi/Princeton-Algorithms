@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.StdDraw;
 import java.util.ArrayList;
 
 public class KdTree {
-    private static class Node implements Comparable {
+    private static class Node {
 
         /* Odd is vertical, even is horizontal.
          * For example, root (level 1) is vertical.
@@ -25,10 +25,6 @@ public class KdTree {
         }
 
 
-        @Override
-        public int compareTo(Object o) {
-            return 0;
-        }
     }
 
     private Node root;
