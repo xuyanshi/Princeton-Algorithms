@@ -5,25 +5,52 @@ import edu.princeton.cs.algs4.StdDraw;
 import java.util.ArrayList;
 
 public class KdTree {
-    private class KdTreeNode {
-        Point2D point;
+    private static class Node implements Comparable {
+
+        /* Odd is vertical, even is horizontal.
+         * For example, root (level 1) is vertical.
+         * */
+        private boolean isOdd;
+        private Point2D point;
+        private Node left, right;
+
+        /* Each node corresponds to an axis-aligned rectangle in the unit square,
+         ** which encloses all the points in its subtree. */
+        private RectHV rect;
+
+        public Node(boolean isOdd, Point2D point, RectHV rect) {
+            this.isOdd = isOdd;
+            this.point = point;
+            this.rect = rect;
+        }
+
+
+        @Override
+        public int compareTo(Object o) {
+            return 0;
+        }
     }
 
-    private KdTreeNode root;
+    private Node root;
+    private int sz;
 
     // construct an empty set of points
     public KdTree() {
         root = null;
+        sz = 0;
     }
 
     // is the set empty?
     public boolean isEmpty() {
-        return true;
+        return size() == 0;
     }
 
     // number of points in the set
     public int size() {
-        return 0;
+        if (root == null) {
+            return 0;
+        }
+        return sz;
     }
 
     // add the point to the set (if it is not already in the set)
@@ -32,7 +59,8 @@ public class KdTree {
             throw new IllegalArgumentException("argument is null.");
         }
         if (!contains(p)) {
-
+            // insert
+            sz++;
         }
     }
 
@@ -92,6 +120,18 @@ public class KdTree {
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
+        KdTree kdtree = new KdTree();
+        kdtree.insert(new Point2D(0.7, 0.2));
+        System.out.println(kdtree.size());
+        System.out.println(kdtree.contains(new Point2D(0.7, 0.2)));
 
+        kdtree.insert(new Point2D(0.5, 0.4));
+        System.out.println(kdtree.size());
+        System.out.println(kdtree.contains(new Point2D(0.5, 0.4)));
+
+        kdtree.insert(new Point2D(0.2, 0.3));
+        kdtree.insert(new Point2D(0.4, 0.7));
+        kdtree.insert(new Point2D(0.9, 0.6));
+        kdtree.draw();
     }
 }
