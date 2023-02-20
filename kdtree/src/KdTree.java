@@ -60,12 +60,12 @@ public class KdTree {
             throw new IllegalArgumentException("argument is null.");
         }
         if (!contains(p)) {
-            insertHelper(root, p, true);
+            insertHelper(root, p, 1);
             sz++;
         }
     }
 
-    private void insertHelper(Node node, Point2D p, boolean vertical) {
+    private void insertHelper(Node node, Point2D p, int depth) {
         if (root == null) {
             root = new Node(1, p, new RectHV(0, 0, 1, 1));
             return;
@@ -73,25 +73,33 @@ public class KdTree {
         if (node == null || p.equals(node.point)) {
             return;
         }
-        if (vertical) {
+        if (depth % 2 == 1) { // Odd Level
             if (p.x() < node.point.x()) {
                 if (node.left == null) {
                     node.left = new Node(node.depth + 1, p, new RectHV(node.rect.xmin(), node.rect.ymin(), p.x(), node.rect.ymax()));
                 } else {
-                    insertHelper(node.left, p, false);
+                    insertHelper(node.left, p, node.depth + 1);
                 }
-            } else if (p.x() > node.point.x()) {
-
             } else {
-
+                if (node.right == null) {
+                    node.right = new Node(node.depth + 1, p, new RectHV(p.x(), node.rect.ymin(), node.rect.xmax(), node.rect.ymax()));
+                } else {
+                    insertHelper(node.right, p, node.depth + 1);
+                }
             }
         } else {
             if (p.y() < node.point.y()) {
-
-            } else if (p.y() > node.point.y()) {
-
+                if (node.left == null) {
+                    node.left = new Node(node.depth + 1, p, new RectHV(node.rect.xmin(), node.rect.ymin(), node.rect.xmax(), p.y()));
+                } else {
+                    insertHelper(node.left, p, node.depth + 1);
+                }
             } else {
-
+                if (node.right == null) {
+                    node.right = new Node(node.depth + 1, p, new RectHV(node.rect.xmin(), p.y(), node.rect.xmax(), node.rect.ymax()));
+                } else {
+                    insertHelper(node.right, p, node.depth + 1);
+                }
             }
         }
     }
