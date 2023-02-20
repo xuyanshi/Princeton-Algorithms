@@ -17,6 +17,12 @@ public class KdTree {
          ** which encloses all the points in its subtree. */
         private RectHV rect;
 
+        public Node(boolean isVertical, Point2D point, RectHV rect) {
+            this.isVertical = isVertical;
+            this.point = point;
+            this.rect = rect;
+        }
+
         private RectHV leftRect() {
             if (isVertical) {
                 return new RectHV(rect.xmin(), rect.ymin(), point.x(), rect.ymax());
@@ -33,15 +39,14 @@ public class KdTree {
             }
         }
 
-        public Node(boolean isVertical, Point2D point, RectHV rect) {
-            this.isVertical = isVertical;
-            this.point = point;
-            this.rect = rect;
-        }
+
     }
 
     private Node root;
     private int sz;
+
+    private double minDistanceSquare;
+    private Point2D minDistancePoint;
 
     // construct an empty set of points
     public KdTree() {
@@ -167,12 +172,36 @@ public class KdTree {
             throw new IllegalArgumentException("argument is null.");
         }
         ArrayList<Point2D> pts = new ArrayList<>();
-//        for (Point2D p : treeset) {
-//            if (p.x() <= rect.xmax() && p.x() >= rect.xmin() && p.y() <= rect.ymax() && p.y() >= rect.ymin()) {
-//                pts.add(p);
-//            }
-//        }
+        rangeHelper(rect, pts, root);
         return pts;
+    }
+
+    private void rangeHelper(RectHV rect, ArrayList<Point2D> pts, Node node) {
+        if (node == null) {
+            return;
+        }
+        if (rect.contains(node.point)) {
+            pts.add(node.point);
+        }
+        if (node.isVertical) {
+            if (node.point.x() > rect.xmax()) {
+                rangeHelper(rect, pts, node.left);
+            } else if (node.point.x() < rect.xmin()) {
+                rangeHelper(rect, pts, node.right);
+            } else {
+                rangeHelper(rect, pts, node.left);
+                rangeHelper(rect, pts, node.right);
+            }
+        } else {
+            if (node.point.y() > rect.ymax()) {
+                rangeHelper(rect, pts, node.left);
+            } else if (node.point.y() < rect.ymin()) {
+                rangeHelper(rect, pts, node.right);
+            } else {
+                rangeHelper(rect, pts, node.left);
+                rangeHelper(rect, pts, node.right);
+            }
+        }
     }
 
     // a nearest neighbor in the set to point p; null if the set is empty
@@ -183,34 +212,43 @@ public class KdTree {
         if (isEmpty()) {
             return null;
         }
-        double minDistanceSquare = Double.POSITIVE_INFINITY;
-        Point2D minDistancePoint = null;
-//        for (Point2D point : treeset) {
-//            if (p == point) {
-//                continue;
-//            }
-//            if (p.distanceSquaredTo(point) < minDistanceSquare) {
-//                minDistanceSquare = p.distanceSquaredTo(point);
-//                minDistancePoint = point;
-//            }
-//        }
+        minDistanceSquare = Double.POSITIVE_INFINITY;
+        minDistancePoint = null;
+        nearestHelper(p, root);
         return minDistancePoint;
+    }
+
+    private void nearestHelper(Point2D p, Node node) {
+        if (node == null) {
+            return;
+        }
+        if (p.distanceSquaredTo(node.point) < minDistanceSquare) {
+            minDistanceSquare = p.distanceSquaredTo(node.point);
+            minDistancePoint = node.point;
+        }
+        boolean leftVisited = false;
+        boolean rightVisited = false;
+        if (node.left != null && node.left.rect.contains(p) ||
+                (node.left != null && node.right != null && node.left.rect.distanceSquaredTo(p) < node.right.rect.distanceSquaredTo(p))) {
+            nearestHelper(p, node.left);
+            leftVisited = true;
+        }
+        if (node.right != null && node.right.rect.contains(p) ||
+                (node.left != null && node.right != null && node.left.rect.distanceSquaredTo(p) > node.right.rect.distanceSquaredTo(p))) {
+            nearestHelper(p, node.right);
+            rightVisited = true;
+        }
+
+        if (node.left != null && !leftVisited && minDistanceSquare >= node.left.rect.distanceSquaredTo(p)) {
+            nearestHelper(p, node.left);
+        }
+        if (node.right != null && !rightVisited && minDistanceSquare >= node.right.rect.distanceSquaredTo(p)) {
+            nearestHelper(p, node.right);
+        }
     }
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
-        KdTree kdtree = new KdTree();
-        kdtree.insert(new Point2D(0.7, 0.2));
-        System.out.println(kdtree.size());
-        System.out.println(kdtree.contains(new Point2D(0.7, 0.2)));
 
-        kdtree.insert(new Point2D(0.5, 0.4));
-        System.out.println(kdtree.size());
-        System.out.println(kdtree.contains(new Point2D(0.5, 0.4)));
-
-        kdtree.insert(new Point2D(0.2, 0.3));
-        kdtree.insert(new Point2D(0.4, 0.7));
-        kdtree.insert(new Point2D(0.9, 0.6));
-        kdtree.draw();
     }
 }

@@ -13,14 +13,16 @@ import java.util.List;
 
 public class KdTree {
     private class Node {
-        /** odd node splits the space vertically
-         *  even node splits the space horizontally
+        /**
+         * odd node splits the space vertically
+         * even node splits the space horizontally
          */
         private boolean isOdd;
         private Point2D point;
         private int size;
         private Node left, right;
         private RectHV rect;
+
         public Node(boolean isOdd, Point2D p, int size, RectHV rect) {
             this.isOdd = isOdd;
             this.point = p;
@@ -48,6 +50,7 @@ public class KdTree {
             }
         }
     }
+
     private Node root;
     private double dist;
     private Point2D nearestPoint;
@@ -67,6 +70,7 @@ public class KdTree {
             return node.size;
         }
     }
+
     // number of points in the set
     public int size() {
         return size(root);
@@ -131,6 +135,7 @@ public class KdTree {
             }
         }
     }
+
     // does the set contain point p?
     public boolean contains(Point2D p) {
         if (p == null) {
@@ -213,7 +218,7 @@ public class KdTree {
         }
         if (p.distanceSquaredTo(node.point) < dist) {
             nearestPoint = node.point;
-            dist = p.distanceSquaredTo(node.point);
+            dist = p.distanceSquaredTo(node.rpoint);
         }
         boolean searchLeft = false, searchRight = false;
         if (node.left != null && node.left.rect.distanceSquaredTo(p) < dist) {
@@ -230,10 +235,10 @@ public class KdTree {
                         nearest(p, node.right);
                     }
                 } else {
-                  nearest(p, node.right);
-                  if (node.left.rect.distanceSquaredTo(p) < dist) {
-                      nearest(p, node.left);
-                  }
+                    nearest(p, node.right);
+                    if (node.left.rect.distanceSquaredTo(p) < dist) {
+                        nearest(p, node.left);
+                    }
                 }
             } else {
                 if (p.y() < node.point.y()) {
@@ -266,7 +271,8 @@ public class KdTree {
         dist = Double.MAX_VALUE;
         nearestPoint = null;
         nearest(p, root);
-        // System.out.println("the number of nodes visited in order to find the nearest is " + visited);
+        // System.out.println("the number of nodes visited in order to find the nearest
+        // is " + visited);
         return nearestPoint;
     }
 
