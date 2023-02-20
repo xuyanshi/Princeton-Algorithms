@@ -68,48 +68,39 @@ public class KdTree {
             throw new IllegalArgumentException("argument is null.");
         }
         if (!contains(p)) {
-            root = insertHelper(root, p, 1);
+            root = insertHelper(root, null, p, true);
             sz++;
         }
     }
 
     private Node insertHelper(Node node, Node parent, Point2D p, boolean isLeft) {
-        if (root == null) {
-            root = new Node(1, p, new RectHV(0, 0, 1, 1));
-            return root;
+        if (node == null) {
+            if (parent == null) { // root
+                return new Node(true, p, new RectHV(0, 0, 1, 1));
+            }
+            if (isLeft) {
+                return new Node(!parent.isVertical, p, parent.leftRect());
+            } else {
+                return new Node(!parent.isVertical, p, parent.rightRect());
+            }
         }
-        if (node == null || p.equals(node.point)) {
+        if (p.equals(node.point)) {
             return node;
         }
-        if (depth % 2 == 1) { // Odd Level
+        if (node.isVertical) { // Odd Level
             if (p.x() < node.point.x()) {
-                if (node.left == null) {
-                    node.left = new Node(node.depth + 1, p, new RectHV(node.rect.xmin(), node.rect.ymin(), p.x(), node.rect.ymax()));
-                } else {
-                    insertHelper(node.left, p, node.depth + 1);
-                }
+                node.left = insertHelper(node.left, node, p, true);
             } else {
-                if (node.right == null) {
-                    node.right = new Node(node.depth + 1, p, new RectHV(p.x(), node.rect.ymin(), node.rect.xmax(), node.rect.ymax()));
-                } else {
-                    insertHelper(node.right, p, node.depth + 1);
-                }
+                node.right = insertHelper(node.right, node, p, false);
             }
         } else {
             if (p.y() < node.point.y()) {
-                if (node.left == null) {
-                    node.left = new Node(node.depth + 1, p, new RectHV(node.rect.xmin(), node.rect.ymin(), node.rect.xmax(), p.y()));
-                } else {
-                    insertHelper(node.left, p, node.depth + 1);
-                }
+                node.left = insertHelper(node.left, node, p, true);
             } else {
-                if (node.right == null) {
-                    node.right = new Node(node.depth + 1, p, new RectHV(node.rect.xmin(), p.y(), node.rect.xmax(), node.rect.ymax()));
-                } else {
-                    insertHelper(node.right, p, node.depth + 1);
-                }
+                node.right = insertHelper(node.right, node, p, false);
             }
         }
+        return node;
     }
 
     // does the set contain point p?
