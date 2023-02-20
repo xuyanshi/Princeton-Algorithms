@@ -6,11 +6,10 @@ import java.util.ArrayList;
 
 public class KdTree {
     private static class Node {
-
         /* Odd is vertical, even is horizontal.
          * For example, root (level 1) is vertical.
          * */
-        private int depth;
+        private boolean isVertical;
         private Point2D point;
         private Node left, right;
 
@@ -18,18 +17,27 @@ public class KdTree {
          ** which encloses all the points in its subtree. */
         private RectHV rect;
 
-
-        private boolean isVertical() {
-            return depth % 2 == 1;
+        private RectHV leftRect() {
+            if (isVertical) {
+                return new RectHV(rect.xmin(), rect.ymin(), point.x(), rect.ymax());
+            } else {
+                return new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), point.y());
+            }
         }
 
-        public Node(int depth, Point2D point, RectHV rect) {
-            this.depth = depth;
+        private RectHV rightRect() {
+            if (isVertical) {
+                return new RectHV(point.x(), rect.ymin(), rect.xmax(), rect.ymax());
+            } else {
+                return new RectHV(rect.xmin(), point.y(), rect.xmax(), rect.ymax());
+            }
+        }
+
+        public Node(boolean isVertical, Point2D point, RectHV rect) {
+            this.isVertical = isVertical;
             this.point = point;
             this.rect = rect;
         }
-
-
     }
 
     private Node root;
@@ -60,18 +68,18 @@ public class KdTree {
             throw new IllegalArgumentException("argument is null.");
         }
         if (!contains(p)) {
-            insertHelper(root, p, 1);
+            root = insertHelper(root, p, 1);
             sz++;
         }
     }
 
-    private void insertHelper(Node node, Point2D p, int depth) {
+    private Node insertHelper(Node node, Node parent, Point2D p, boolean isLeft) {
         if (root == null) {
             root = new Node(1, p, new RectHV(0, 0, 1, 1));
-            return;
+            return root;
         }
         if (node == null || p.equals(node.point)) {
-            return;
+            return node;
         }
         if (depth % 2 == 1) { // Odd Level
             if (p.x() < node.point.x()) {
@@ -109,32 +117,57 @@ public class KdTree {
         if (p == null) {
             throw new IllegalArgumentException("argument is null.");
         }
-        return containsHelper(root, p);
+        return containsHelper(root, p, true);
     }
 
-    private boolean containsHelper(Node node, Point2D p) {
+    private boolean containsHelper(Node node, Point2D p, boolean vertical) {
         if (node == null) {
             return false;
         }
         if (p.equals(node.point)) {
             return true;
         }
-        if (node.depth % 2 == 1) {
-
+        if (vertical) {
+            if (p.x() < node.point.x()) {
+                return containsHelper(node.left, p, false);
+            } else {
+                return containsHelper(node.right, p, false);
+            }
         } else {
-
+            if (p.y() < node.point.y()) {
+                return containsHelper(node.left, p, true);
+            } else {
+                return containsHelper(node.right, p, true);
+            }
         }
-        return false;
     }
 
     // draw all points to standard draw
     public void draw() {
-        StdDraw.setXscale(0, 1);
-        StdDraw.setYscale(0, 1);
-//        for (Point2D p : treeset) {
-//            p.draw();
-//        }
-        StdDraw.show();
+        drawHelper(root, true);
+    }
+
+    private void drawHelper(Node node, boolean vertical) {
+        if (node == null) {
+            return;
+        }
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.01);
+        node.point.draw();
+        StdDraw.setPenRadius();
+        if (vertical) {
+            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.line(node.point.x(), node.rect.ymin(), node.point.x(), node.rect.ymax());
+        } else {
+            StdDraw.setPenColor(StdDraw.BLUE);
+            StdDraw.line(node.rect.xmin(), node.point.y(), node.rect.xmax(), node.point.y());
+        }
+        if (node.left != null) {
+            drawHelper(node.left, !vertical);
+        }
+        if (node.right != null) {
+            drawHelper(node.right, !vertical);
+        }
     }
 
     // all points that are inside the rectangle (or on the boundary)
