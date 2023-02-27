@@ -41,6 +41,6 @@ Algorithms I Start Date: Wed Jan 25 2023
 
 Algorithms I End Date: Mon Feb 20 2023
 
-Algorithms II Start Date: 
+Algorithms II Start Date: Wed Mar 1 2023
 
-Algorithms II End Date: 
+Algorithms II End Date:  2023
