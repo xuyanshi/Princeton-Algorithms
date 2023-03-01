@@ -3,7 +3,7 @@ This repository contains my solution for the coursera course Algorithms I & II
 
 ## Useful Links
 
-[Textbook](https://algs4.cs.princeton.edu/home/)
+[Textbook (Algorithms, 4th Edition)](https://algs4.cs.princeton.edu/home/)
 
 [Textbook Implementation](https://algs4.cs.princeton.edu/code/)
 
