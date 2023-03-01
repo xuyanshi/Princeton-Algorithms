@@ -5,7 +5,7 @@ This repository contains my solution for the coursera course Algorithms I & II
 
 [Textbook (Algorithms, 4th Edition)](https://algs4.cs.princeton.edu/home/)
 
-[Textbook Implementation](https://algs4.cs.princeton.edu/code/)
+[Official Implementation](https://algs4.cs.princeton.edu/code/)
 
 [Coursera course website : part1](https://www.coursera.org/learn/algorithms-part1/home/welcome)
 
