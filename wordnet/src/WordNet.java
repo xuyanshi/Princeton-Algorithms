@@ -24,7 +24,7 @@ public class WordNet {
     }
 
     // a synset (second field of synsets.txt) that is the common ancestor of nounA and nounB
-    // in a shortest ancestral path (defined below)
+    // in the shortest ancestral path (defined below)
     public String sap(String nounA, String nounB) {
         return null;
     }
