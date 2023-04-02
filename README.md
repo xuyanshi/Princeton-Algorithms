@@ -1,4 +1,5 @@
 # Princeton-Algorithms
+
 This repository contains my solution for the coursera course Algorithms I & II
 
 ## Useful Links
@@ -13,7 +14,7 @@ This repository contains my solution for the coursera course Algorithms I & II
 
 [Project 1: percolation](https://coursera.cs.princeton.edu/algs4/assignments/percolation/specification.php)
 
-[Project 2 : Queues](https://coursera.cs.princeton.edu/algs4/assignments/queues/specification.php) 
+[Project 2 : Queues](https://coursera.cs.princeton.edu/algs4/assignments/queues/specification.php)
 
 [Project 3 : colinear](https://coursera.cs.princeton.edu/algs4/assignments/collinear/specification.php)
 
@@ -32,6 +33,7 @@ This repository contains my solution for the coursera course Algorithms I & II
 [Project 10 : Burrows-Wheeler](https://coursera.cs.princeton.edu/algs4/assignments/burrows/specification.php)
 
 Thanks for:
+
 - [CSDIY](https://csdiy.wiki/数据结构与算法/Algo/)
 - [Reference 1](https://github.com/PKUFlyingPig/Princeton-Algorithm)
 - [Reference 2](https://github.com/MolinDeng/Princeton-algs4)
@@ -41,6 +43,11 @@ Algorithms I Start Date: Wed Jan 25 2023
 
 Algorithms I End Date: Mon Feb 20 2023
 
-Algorithms II Start Date:  2023
+Algorithms II Start Date:  TODO
 
-Algorithms II End Date:  2023
+Algorithms II End Date: TODO
+
+
+
+The assignments for the algorithms course at Princeton University significantly overlap with [CS 61B of UCB](https://github.com/xuyanshi/cs61b-2018), so I have decided to skip the second part of this course and continue in the future.
+
